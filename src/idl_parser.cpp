@@ -936,30 +936,36 @@ CheckedError Parser::ParseTable(const StructDef &struct_def, std::string *value,
           auto off = builder_.CreateVector(builder.GetBuffer());
           val.constant = NumToString(off.o);
         } else if (field->nested_flatbuffer) {
-          auto nested = field->attributes.Lookup("nested_flatbuffer");
-          auto cursorAtValueBegin = cursor_;
-          ECHECK(SkipAnyJsonValue());
-          std::string substring(cursorAtValueBegin -1 , cursor_ -1);
-
-          //create new parser
-          // ideally this should be a Parser::method
-          Parser nestedParser;
-          nestedParser.root_struct_def_ = nested->type.struct_def;
-          nestedParser.types_ = types_;
-          nestedParser.structs_ = structs_;
-          nestedParser.enums_ = enums_;
-          nestedParser.services_ = services_;
-          std::copy(namespaces_.begin(), namespaces_.end(), std::back_inserter(nestedParser.namespaces_));
-          std::copy(known_attributes_.begin(), known_attributes_.end(), std::insert_iterator<decltype(known_attributes_)>(nestedParser.known_attributes_, nestedParser.known_attributes_.end()));
-          nestedParser.opts = opts;
-          nestedParser.uses_flexbuffers_ = uses_flexbuffers_;
-
-          if (!nestedParser.Parse(substring.c_str(), nullptr, nullptr)) {
-            ECHECK(Error(nestedParser.error_));
+            //TODO: export to function
+          if (token_ == '[') {// backwards compat for 'legacy' ubyte buffers
+            ECHECK(ParseAnyValue(val, field, fieldn, &struct_def));
           }
+          else {
+            auto nested = field->attributes.Lookup("nested_flatbuffer");
+            auto cursorAtValueBegin = cursor_;
+            ECHECK(SkipAnyJsonValue());
+            std::string substring(cursorAtValueBegin -1 , cursor_ -1);
 
-          auto off = builder_.CreateVector(nestedParser.builder_.GetBufferPointer(), nestedParser.builder_.GetSize());
-          val.constant = NumToString(off.o);
+            //create new parser
+            // ideally this should be a Parser::method
+            Parser nestedParser;
+            nestedParser.root_struct_def_ = nested->type.struct_def;
+            nestedParser.types_ = types_;
+            nestedParser.structs_ = structs_;
+            nestedParser.enums_ = enums_;
+            nestedParser.services_ = services_;
+            std::copy(namespaces_.begin(), namespaces_.end(), std::back_inserter(nestedParser.namespaces_));
+            std::copy(known_attributes_.begin(), known_attributes_.end(), std::insert_iterator<decltype(known_attributes_)>(nestedParser.known_attributes_, nestedParser.known_attributes_.end()));
+            nestedParser.opts = opts;
+            nestedParser.uses_flexbuffers_ = uses_flexbuffers_;
+
+            if (!nestedParser.Parse(substring.c_str(), nullptr, nullptr)) {
+              ECHECK(Error(nestedParser.error_));
+            }
+
+            auto off = builder_.CreateVector(nestedParser.builder_.GetBufferPointer(), nestedParser.builder_.GetSize());
+            val.constant = NumToString(off.o);
+          }
         } else {
           ECHECK(ParseAnyValue(val, field, fieldn, &struct_def));
         }
