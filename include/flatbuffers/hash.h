@@ -43,7 +43,7 @@ struct FnvTraits<uint64_t> {
 };
 
 template <typename T>
-constexpr T HashFnv1(const char *input) {
+FLATBUFFERS_CONSTEXPR_CPP14 T HashFnv1(const char *input) {
   T hash = FnvTraits<T>::kOffsetBasis;
   for (const char *c = input; *c; ++c) {
     hash *= FnvTraits<T>::kFnvPrime;
@@ -53,7 +53,7 @@ constexpr T HashFnv1(const char *input) {
 }
 
 template <typename T>
-constexpr T HashFnv1a(const char *input) {
+FLATBUFFERS_CONSTEXPR_CPP14 T HashFnv1a(const char *input) {
   T hash = FnvTraits<T>::kOffsetBasis;
   for (const char *c = input; *c; ++c) {
     hash ^= static_cast<unsigned char>(*c);
