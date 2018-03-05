@@ -21,6 +21,7 @@
 #include <cstring>
 
 #include "flatbuffers/flatbuffers.h"
+#include "flatbuffers/util.h"
 
 namespace flatbuffers {
 
@@ -67,6 +68,10 @@ template <> FLATBUFFERS_CONSTEXPR_CPP14 inline uint16_t HashFnv1a<uint16_t>(cons
   return (hash >> 16) ^ (hash & 0xffff);
 }
 
+template<typename T> inline T HashIndex(const char *input) {
+  return (T)StringToUInt(input);
+}
+
 template <typename T> struct NamedHashFunction {
   const char *name;
 
@@ -77,16 +82,19 @@ template <typename T> struct NamedHashFunction {
 const NamedHashFunction<uint16_t> kHashFunctions16[] = {
   { "fnv1_16",  HashFnv1<uint16_t> },
   { "fnv1a_16", HashFnv1a<uint16_t> },
+  { "index",    HashIndex<uint16_t> },
 };
 
 const NamedHashFunction<uint32_t> kHashFunctions32[] = {
   { "fnv1_32", HashFnv1<uint32_t> },
   { "fnv1a_32", HashFnv1a<uint32_t> },
+  { "index",    HashIndex<uint32_t> },
 };
 
 const NamedHashFunction<uint64_t> kHashFunctions64[] = {
   { "fnv1_64", HashFnv1<uint64_t> },
   { "fnv1a_64", HashFnv1a<uint64_t> },
+  { "index",    HashIndex<uint64_t> },
 };
 
 inline NamedHashFunction<uint16_t>::HashFunction FindHashFunction16(
