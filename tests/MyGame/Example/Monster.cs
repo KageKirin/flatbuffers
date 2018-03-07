@@ -122,8 +122,12 @@ public struct Monster : IFlatbufferObject
   public int VectorOfNonOwningReferencesLength { get { int o = __p.__offset(88); return o != 0 ? __p.__vector_len(o) : 0; } }
   public ArraySegment<byte>? GetVectorOfNonOwningReferencesBytes() { return __p.__vector_as_arraysegment(88); }
   public bool MutateVectorOfNonOwningReferences(int j, ulong vector_of_non_owning_references) { int o = __p.__offset(88); if (o != 0) { __p.bb.PutUlong(__p.__vector(o) + j * 8, vector_of_non_owning_references); return true; } else { return false; } }
+  public ulong VectorOfIndexReferences(int j) { int o = __p.__offset(90); return o != 0 ? __p.bb.GetUlong(__p.__vector(o) + j * 8) : (ulong)0; }
+  public int VectorOfIndexReferencesLength { get { int o = __p.__offset(90); return o != 0 ? __p.__vector_len(o) : 0; } }
+  public ArraySegment<byte>? GetVectorOfIndexReferencesBytes() { return __p.__vector_as_arraysegment(90); }
+  public bool MutateVectorOfIndexReferences(int j, ulong vector_of_index_references) { int o = __p.__offset(90); if (o != 0) { __p.bb.PutUlong(__p.__vector(o) + j * 8, vector_of_index_references); return true; } else { return false; } }
 
-  public static void StartMonster(FlatBufferBuilder builder) { builder.StartObject(43); }
+  public static void StartMonster(FlatBufferBuilder builder) { builder.StartObject(44); }
   public static void AddPos(FlatBufferBuilder builder, Offset<Vec3> posOffset) { builder.AddStruct(0, posOffset.Value, 0); }
   public static void AddMana(FlatBufferBuilder builder, short mana) { builder.AddShort(1, mana, 150); }
   public static void AddHp(FlatBufferBuilder builder, short hp) { builder.AddShort(2, hp, 100); }
@@ -197,6 +201,9 @@ public struct Monster : IFlatbufferObject
   public static void AddVectorOfNonOwningReferences(FlatBufferBuilder builder, VectorOffset vectorOfNonOwningReferencesOffset) { builder.AddOffset(42, vectorOfNonOwningReferencesOffset.Value, 0); }
   public static VectorOffset CreateVectorOfNonOwningReferencesVector(FlatBufferBuilder builder, ulong[] data) { builder.StartVector(8, data.Length, 8); for (int i = data.Length - 1; i >= 0; i--) builder.AddUlong(data[i]); return builder.EndVector(); }
   public static void StartVectorOfNonOwningReferencesVector(FlatBufferBuilder builder, int numElems) { builder.StartVector(8, numElems, 8); }
+  public static void AddVectorOfIndexReferences(FlatBufferBuilder builder, VectorOffset vectorOfIndexReferencesOffset) { builder.AddOffset(43, vectorOfIndexReferencesOffset.Value, 0); }
+  public static VectorOffset CreateVectorOfIndexReferencesVector(FlatBufferBuilder builder, ulong[] data) { builder.StartVector(8, data.Length, 8); for (int i = data.Length - 1; i >= 0; i--) builder.AddUlong(data[i]); return builder.EndVector(); }
+  public static void StartVectorOfIndexReferencesVector(FlatBufferBuilder builder, int numElems) { builder.StartVector(8, numElems, 8); }
   public static Offset<Monster> EndMonster(FlatBufferBuilder builder) {
     int o = builder.EndObject();
     builder.Required(o, 10);  // name

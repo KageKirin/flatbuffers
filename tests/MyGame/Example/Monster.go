@@ -656,8 +656,25 @@ func (rcv *Monster) VectorOfNonOwningReferencesLength() int {
 	return 0
 }
 
+func (rcv *Monster) VectorOfIndexReferences(j int) uint64 {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(90))
+	if o != 0 {
+		a := rcv._tab.Vector(o)
+		return rcv._tab.GetUint64(a + flatbuffers.UOffsetT(j*8))
+	}
+	return 0
+}
+
+func (rcv *Monster) VectorOfIndexReferencesLength() int {
+	o := flatbuffers.UOffsetT(rcv._tab.Offset(90))
+	if o != 0 {
+		return rcv._tab.VectorLen(o)
+	}
+	return 0
+}
+
 func MonsterStart(builder *flatbuffers.Builder) {
-	builder.StartObject(43)
+	builder.StartObject(44)
 }
 func MonsterAddPos(builder *flatbuffers.Builder, pos flatbuffers.UOffsetT) {
 	builder.PrependStructSlot(0, flatbuffers.UOffsetT(pos), 0)
@@ -834,6 +851,12 @@ func MonsterAddVectorOfNonOwningReferences(builder *flatbuffers.Builder, vectorO
 	builder.PrependUOffsetTSlot(42, flatbuffers.UOffsetT(vectorOfNonOwningReferences), 0)
 }
 func MonsterStartVectorOfNonOwningReferencesVector(builder *flatbuffers.Builder, numElems int) flatbuffers.UOffsetT {
+	return builder.StartVector(8, numElems, 8)
+}
+func MonsterAddVectorOfIndexReferences(builder *flatbuffers.Builder, vectorOfIndexReferences flatbuffers.UOffsetT) {
+	builder.PrependUOffsetTSlot(43, flatbuffers.UOffsetT(vectorOfIndexReferences), 0)
+}
+func MonsterStartVectorOfIndexReferencesVector(builder *flatbuffers.Builder, numElems int) flatbuffers.UOffsetT {
 	return builder.StartVector(8, numElems, 8)
 }
 func MonsterEnd(builder *flatbuffers.Builder) flatbuffers.UOffsetT {

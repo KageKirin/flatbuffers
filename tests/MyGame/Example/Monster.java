@@ -147,8 +147,13 @@ public final class Monster extends Table {
   public ByteBuffer vectorOfNonOwningReferencesAsByteBuffer() { return __vector_as_bytebuffer(88, 8); }
   public ByteBuffer vectorOfNonOwningReferencesInByteBuffer(ByteBuffer _bb) { return __vector_in_bytebuffer(_bb, 88, 8); }
   public boolean mutateVectorOfNonOwningReferences(int j, long vector_of_non_owning_references) { int o = __offset(88); if (o != 0) { bb.putLong(__vector(o) + j * 8, vector_of_non_owning_references); return true; } else { return false; } }
+  public long vectorOfIndexReferences(int j) { int o = __offset(90); return o != 0 ? bb.getLong(__vector(o) + j * 8) : 0; }
+  public int vectorOfIndexReferencesLength() { int o = __offset(90); return o != 0 ? __vector_len(o) : 0; }
+  public ByteBuffer vectorOfIndexReferencesAsByteBuffer() { return __vector_as_bytebuffer(90, 8); }
+  public ByteBuffer vectorOfIndexReferencesInByteBuffer(ByteBuffer _bb) { return __vector_in_bytebuffer(_bb, 90, 8); }
+  public boolean mutateVectorOfIndexReferences(int j, long vector_of_index_references) { int o = __offset(90); if (o != 0) { bb.putLong(__vector(o) + j * 8, vector_of_index_references); return true; } else { return false; } }
 
-  public static void startMonster(FlatBufferBuilder builder) { builder.startObject(43); }
+  public static void startMonster(FlatBufferBuilder builder) { builder.startObject(44); }
   public static void addPos(FlatBufferBuilder builder, int posOffset) { builder.addStruct(0, posOffset, 0); }
   public static void addMana(FlatBufferBuilder builder, short mana) { builder.addShort(1, mana, 150); }
   public static void addHp(FlatBufferBuilder builder, short hp) { builder.addShort(2, hp, 100); }
@@ -222,6 +227,9 @@ public final class Monster extends Table {
   public static void addVectorOfNonOwningReferences(FlatBufferBuilder builder, int vectorOfNonOwningReferencesOffset) { builder.addOffset(42, vectorOfNonOwningReferencesOffset, 0); }
   public static int createVectorOfNonOwningReferencesVector(FlatBufferBuilder builder, long[] data) { builder.startVector(8, data.length, 8); for (int i = data.length - 1; i >= 0; i--) builder.addLong(data[i]); return builder.endVector(); }
   public static void startVectorOfNonOwningReferencesVector(FlatBufferBuilder builder, int numElems) { builder.startVector(8, numElems, 8); }
+  public static void addVectorOfIndexReferences(FlatBufferBuilder builder, int vectorOfIndexReferencesOffset) { builder.addOffset(43, vectorOfIndexReferencesOffset, 0); }
+  public static int createVectorOfIndexReferencesVector(FlatBufferBuilder builder, long[] data) { builder.startVector(8, data.length, 8); for (int i = data.length - 1; i >= 0; i--) builder.addLong(data[i]); return builder.endVector(); }
+  public static void startVectorOfIndexReferencesVector(FlatBufferBuilder builder, int numElems) { builder.startVector(8, numElems, 8); }
   public static int endMonster(FlatBufferBuilder builder) {
     int o = builder.endObject();
     builder.required(o, 10);  // name

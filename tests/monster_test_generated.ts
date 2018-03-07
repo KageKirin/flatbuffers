@@ -1648,10 +1648,27 @@ vectorOfNonOwningReferencesLength():number {
 };
 
 /**
+ * @param {number} index
+ * @returns {flatbuffers.Long}
+ */
+vectorOfIndexReferences(index: number):flatbuffers.Long|null {
+  var offset = this.bb!.__offset(this.bb_pos, 90);
+  return offset ? this.bb!.readUint64(this.bb!.__vector(this.bb_pos + offset) + index * 8) : this.bb!.createLong(0, 0);
+};
+
+/**
+ * @returns {number}
+ */
+vectorOfIndexReferencesLength():number {
+  var offset = this.bb!.__offset(this.bb_pos, 90);
+  return offset ? this.bb!.__vector_len(this.bb_pos + offset) : 0;
+};
+
+/**
  * @param {flatbuffers.Builder} builder
  */
 static startMonster(builder:flatbuffers.Builder) {
-  builder.startObject(43);
+  builder.startObject(44);
 };
 
 /**
@@ -2305,6 +2322,35 @@ static createVectorOfNonOwningReferencesVector(builder:flatbuffers.Builder, data
  * @param {number} numElems
  */
 static startVectorOfNonOwningReferencesVector(builder:flatbuffers.Builder, numElems:number) {
+  builder.startVector(8, numElems, 8);
+};
+
+/**
+ * @param {flatbuffers.Builder} builder
+ * @param {flatbuffers.Offset} vectorOfIndexReferencesOffset
+ */
+static addVectorOfIndexReferences(builder:flatbuffers.Builder, vectorOfIndexReferencesOffset:flatbuffers.Offset) {
+  builder.addFieldOffset(43, vectorOfIndexReferencesOffset, 0);
+};
+
+/**
+ * @param {flatbuffers.Builder} builder
+ * @param {Array.<flatbuffers.Long>} data
+ * @returns {flatbuffers.Offset}
+ */
+static createVectorOfIndexReferencesVector(builder:flatbuffers.Builder, data:flatbuffers.Long[]):flatbuffers.Offset {
+  builder.startVector(8, data.length, 8);
+  for (var i = data.length - 1; i >= 0; i--) {
+    builder.addInt64(data[i]);
+  }
+  return builder.endVector();
+};
+
+/**
+ * @param {flatbuffers.Builder} builder
+ * @param {number} numElems
+ */
+static startVectorOfIndexReferencesVector(builder:flatbuffers.Builder, numElems:number) {
   builder.startVector(8, numElems, 8);
 };
 

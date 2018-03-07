@@ -1655,10 +1655,27 @@ MyGame.Example.Monster.prototype.vectorOfNonOwningReferencesLength = function() 
 };
 
 /**
+ * @param {number} index
+ * @returns {flatbuffers.Long}
+ */
+MyGame.Example.Monster.prototype.vectorOfIndexReferences = function(index) {
+  var offset = this.bb.__offset(this.bb_pos, 90);
+  return offset ? this.bb.readUint64(this.bb.__vector(this.bb_pos + offset) + index * 8) : this.bb.createLong(0, 0);
+};
+
+/**
+ * @returns {number}
+ */
+MyGame.Example.Monster.prototype.vectorOfIndexReferencesLength = function() {
+  var offset = this.bb.__offset(this.bb_pos, 90);
+  return offset ? this.bb.__vector_len(this.bb_pos + offset) : 0;
+};
+
+/**
  * @param {flatbuffers.Builder} builder
  */
 MyGame.Example.Monster.startMonster = function(builder) {
-  builder.startObject(43);
+  builder.startObject(44);
 };
 
 /**
@@ -2312,6 +2329,35 @@ MyGame.Example.Monster.createVectorOfNonOwningReferencesVector = function(builde
  * @param {number} numElems
  */
 MyGame.Example.Monster.startVectorOfNonOwningReferencesVector = function(builder, numElems) {
+  builder.startVector(8, numElems, 8);
+};
+
+/**
+ * @param {flatbuffers.Builder} builder
+ * @param {flatbuffers.Offset} vectorOfIndexReferencesOffset
+ */
+MyGame.Example.Monster.addVectorOfIndexReferences = function(builder, vectorOfIndexReferencesOffset) {
+  builder.addFieldOffset(43, vectorOfIndexReferencesOffset, 0);
+};
+
+/**
+ * @param {flatbuffers.Builder} builder
+ * @param {Array.<flatbuffers.Long>} data
+ * @returns {flatbuffers.Offset}
+ */
+MyGame.Example.Monster.createVectorOfIndexReferencesVector = function(builder, data) {
+  builder.startVector(8, data.length, 8);
+  for (var i = data.length - 1; i >= 0; i--) {
+    builder.addInt64(data[i]);
+  }
+  return builder.endVector();
+};
+
+/**
+ * @param {flatbuffers.Builder} builder
+ * @param {number} numElems
+ */
+MyGame.Example.Monster.startVectorOfIndexReferencesVector = function(builder, numElems) {
   builder.startVector(8, numElems, 8);
 };
 
